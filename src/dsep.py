@@ -3,17 +3,20 @@
 ## Lingxue Zhu
 ## 2017/02/05
 ####################################################
+##
 ## Description:
+##
 ## Given a Bayesian Network, and several queries in the form of X Y | Z
 ## where X, Y are two query nodes, Z is a set of observed nodes,
 ## the algorithm checks whether X and Y are d-separated given Z.
 ##
-## Reference: 
-## Koller and Friedman (2009), 
+## Reference: Koller and Friedman (2009), 
 ## Probabilistic Graphical Models: Principles and Techniques
 ##
 ####################################################
+##
 ## Input from stdin:
+##
 ## 1. First line contains 3 numbers: N M Q
 ##    where N and M are the number of nodes and edges in the BN, respectively,
 ##    Q is the number of D-separation queries that will follow.
@@ -23,23 +26,26 @@
 ##    Each line denotes a query: whether A and B are d-separated given C D E...
 ##
 ####################################################
+##
 ## Output to stdout:
+##
 ## Q lines, one line per query, 
 ## prints "True" if the nodes are d-separated or "False" otherwise.
 ##
 ####################################################
+##
 ## Example:
 ##
 ## Input from stdin:
-## > 3 2 2
-## > A B
-## > B C
-## > A C | B
-## > C A |
+## 3 2 2
+## A B
+## B C
+## A C | B
+## C A |
 ##
 ## Output to stdout:
-## > True
-## > False
+## True
+## False
 ##
 ## This constructs a BN with 3 nodes and 2 edges:
 ##    A --> B --> C
@@ -47,7 +53,9 @@
 ## (1) Are A and C d-separated given B? (True)
 ## (2) Are C and A d-separated? (False)
 ##
-## See ../tests/dsep/* for more examples.
+## See ../tests/dsep/* for more examples. To run the tests:
+##
+## $ python dsep.py < ../tests/dsep/test1.in
 ## 
 ####################################################
 
@@ -104,7 +112,6 @@ class BN(object):
         """
         self.nodes = dict()
 
-
     def add_edge(self, edge):
         """
         Add a directed edge to the graph.
@@ -137,7 +144,6 @@ class BN(object):
             print "\t\tParents: " + str(node.parents.keys())
             print "\t\tChildren: " + str(node.children.keys())
 
-
     def find_obs_anc(self, observed):
         """
         Traverse the graph, find all nodes that have observed descendants.
@@ -161,10 +167,12 @@ class BN(object):
 
         return obs_anc
 
-
     def is_dsep(self, start, end, observed):
         """
         Check whether start and end are d-separated given observed.
+        This algorithm mainly follows the "Reachable" procedure in 
+        Koller and Friedman (2009), 
+        "Probabilistic Graphical Models: Principles and Techniques", page 75.
 
         Args:
             start: a string, name of the first query node
@@ -176,16 +184,15 @@ class BN(object):
         obs_anc = self.find_obs_anc(observed)
 
         ## Try all active paths starting from the node "start".
-        ## If any of the paths reaches the node "end", then they are not d-separated.
-        ## In order to deal with v-structures, for each of the nodes in the paths, 
-        ## we need to keep track of the directions:
-        ## "up" if traveled from child to parent, and "down" otherwise
+        ## If any of the paths reaches the node "end", 
+        ## then "start" and "end" are *not* d-separated.
+        ## In order to deal with v-structures, 
+        ## we need to keep track of the direction of traversal:
+        ## "up" if traveled from child to parent, and "down" otherwise.
         via_nodes = [(start, "up")]
         visited = set() ## keep track of visited nodes to avoid cyclic paths
-        reachable = set() ## reachable nodes are *not* d-separated from "start" node
 
-        while len(via_nodes) > 0:
-            
+        while len(via_nodes) > 0: 
             (nname, direction) = via_nodes.pop()
             node = self.nodes[nname]
 
@@ -193,7 +200,7 @@ class BN(object):
             if (nname, direction) not in visited:
                 visited.add((nname, direction)) 
 
-                ## the current node is reachable
+                ## if reaches the node "end", then it is not d-separated
                 if nname not in observed and nname == end:
                     return False
 
@@ -206,24 +213,25 @@ class BN(object):
                         via_nodes.append((child, "down"))
                 ## if traversing from parents, then need to check v-structure
                 elif direction == "down":
-                    if nname not in observed: ## path to children is always active
+                    ## path to children is always active
+                    if nname not in observed: 
                         for child in node.children:
                             via_nodes.append((child, "down"))
-                    if nname in observed or nname in obs_anc: ## v-structure
+                    ## path to parent forms a v-structure
+                    if nname in observed or nname in obs_anc: 
                         for parent in node.parents:
                             via_nodes.append((parent, "up"))
         return True
 
 
 if __name__ == "__main__":
-
     ########################
     ## Read from stdin
     ########################
     ## first line: number of nodes, number of edges, number of queries. 
     header = sys.stdin.readline().rstrip().split(" ")
     if len(header) != 3:
-        print("First line must specify 3 numbers: number of nodes, edges and queries.")
+        print("First line must specify number of nodes, edges and queries.")
         sys.exit(1)
     (nnode, nedge, nquery) = map(int, header)
 
