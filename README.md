@@ -71,8 +71,8 @@ False
 ```
 
 ## I-equivalence
-Given two Bayesian Networks, `src/iequiv.py` tests whether they are I-equivalent.
-Following Koller and Friedman (2009), two BN are I-equivalent if and only if they have the same skeletons and immoralities.
+Given two Bayesian Networks (BNs), `src/iequiv.py` tests whether they are I-equivalent.
+Following *Koller and Friedman (2009)*, two BNs are I-equivalent if and only if they have the same skeletons and immoralities.
 
 To run the code, try
 ```
