@@ -68,7 +68,7 @@ from BN import *
 def check_iequv(bn1, bn2):
     """
     Check whether two Bayesian Networks are I-equivalent.
-    Two BN are I-equivalent if and only if they have the same
+    Two BNs are I-equivalent if and only if they have the same
     skeletons and immoralities
 
     Args:
