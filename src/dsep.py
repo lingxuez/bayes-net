@@ -92,36 +92,10 @@ if __name__ == "__main__":
     myBN = BN()
     for edge in edges:
         myBN.add_edge(edge)
-        
-    ## for debugging: visualize the graph
-    # myBN.print_graph()
 
     ########################
     ## Check D-separation
     ########################
-    ## queries
     for (start, end, observed) in queries:
         print myBN.is_dsep(start, end, observed)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

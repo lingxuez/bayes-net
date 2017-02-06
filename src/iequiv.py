@@ -59,11 +59,8 @@
 ## 
 ####################################################
 
-
-
 import sys
 from BN import *
-
 
 def check_iequv(bn1, bn2):
     """
@@ -131,10 +128,7 @@ if __name__ == "__main__":
     for edge in edges2:
         secondBN.add_edge(edge)
 
-
     ########################
     ## Check I-equivalence
     ########################
     print check_iequv (firstBN, secondBN)
-
-

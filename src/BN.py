@@ -210,10 +210,3 @@ class BN(object):
                             immoral.add((p1, p2))
 
         return (skeleton, immoral)
-
-
-
-
-
-
-
