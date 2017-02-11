@@ -133,7 +133,7 @@ A -> B <- C
 and the algorithm prints `False` to `stdout` since they are not I-equivalent.
 
 ## Tests
-Several simple test cases are provided in `tests/dsep` and `tests/iequiv`. To run the tests:
+Several simple test cases are provided in `tests/dsep` and `tests/iequiv`. Special thanks to the TAs in [CMU 10-708](http://www.cs.cmu.edu/~epxing/Class/10708-17/) for the test cases. To run the tests:
 ```
 cd src
 python dsep.py < ../tests/dsep/test1.in
